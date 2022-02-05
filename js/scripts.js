@@ -18,16 +18,21 @@ let pokemonRepository = (function () {
   //DOM Manipulation
   function addListItem(pokemon) {
     let listPokemon = document.querySelector(".pokemon-list");
-    let listItem = document.createElement("li");
-    listItem.classList.add("list-unstyled");
-    listItem.classList.add("group-list-item");
-    listItem.setAttribute("data-bs-toggle","modal") /*this opens the modal on each clicked pokemon*/
-    listItem.setAttribute("data-bs-target", "#exampleModal")
+    let listItem = document.createElement("div");
+    listItem.classList.add("col-md-3");
+    listItem.classList.add("py-3");
+    listItem.classList.add("d-grid");
+    // listItem.classList.add("group-list-item");
+    
     
     //Button
     let buttonOne = document.createElement("button");
     buttonOne.innerText = pokemon.name;
-    buttonOne.classList.add("button-style");
+    buttonOne.classList.add("btn");
+    buttonOne.classList.add("btn-warning");
+    buttonOne.classList.add("btn-lg");
+    buttonOne.setAttribute("data-bs-toggle","modal") /*this opens the modal on each clicked pokemon*/
+    buttonOne.setAttribute("data-bs-target", "#exampleModal")
 
 
     listItem.appendChild(buttonOne); /*fixes  a button to list*/
@@ -46,14 +51,14 @@ let pokemonRepository = (function () {
         return response.json();
       })
       .then(function (json) {
-       console.log(json);
+      //  console.log(json);
         json.results.forEach(function (item) {
           let pokemon = {
             name: item.name,
             detailsUrl: item.url,
           };
           add(pokemon);
-          console.log(pokemon);
+          // console.log(pokemon);
         });
       })
       .catch(function (e) {
@@ -80,6 +85,7 @@ let pokemonRepository = (function () {
 
   function showDetails(pokemon) {
     loadDetails(pokemon).then(function () {
+      console.log(pokemon)
       showModal(pokemon);
     });}
     //Modal Code starts here: Show Modal
@@ -89,13 +95,24 @@ let pokemonRepository = (function () {
       //Clear all existing modal content
       modal.innerHTML = '';
       let titleElement = document.createElement('h1');
+      titleElement.classList.add('text-uppercase')
       titleElement.innerText = pokemon.name;
   
       let contentElement = document.createElement('img');
       contentElement.src = pokemon.imageUrl;
 
+      let heightElement = document.createElement('p');
+      heightElement.innerText = `Height: ${pokemon.height}`;
+
+      let typesElement = document.createElement('p');
+      typesElement.innerText = `Types: ${pokemon.types.map(function(type){
+        return type.type.name;
+      }).join(', ')}`;
+
       modal.appendChild(titleElement);
       modal.appendChild(contentElement);
+      modal.appendChild(heightElement);
+      modal.appendChild(typesElement);
     }
     
 
